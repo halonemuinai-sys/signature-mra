@@ -1,34 +1,15 @@
 # Panduan Pemasangan Tanda Tangan Email HTML (MRA Group & MRA Media) di Microsoft Outlook
 
-Panduan ini menjelaskan cara memasang berkas tanda tangan email HTML ke Microsoft Outlook (Desktop & Web) agar tampil interaktif dan profesional. Kami menyediakan 3 contoh berkas tanda tangan yang dapat Anda gunakan:
-* **Contoh 1 (MRA Group)**: `signature.htm` (logo MRA Group, 16 logo unit bisnis, dan ikon gembok outline modern).
-* **Contoh 2 (MRA Media)**: `signature_media.htm` (logo MRA Media, 9 logo media brand, dan ikon gembok outline modern).
-* **Contoh 3 (MRA Group - Mockup Asli)**: `signature_v3.htm` (logo MRA Group, 16 logo unit bisnis, dan ikon gembok abu-abu metalik klasik dari mockup terbaru Anda).
+Seluruh gambar dalam tanda tangan email ini **telah berhasil diunggah ke GitHub** dan dimuat menggunakan **jsDelivr CDN** (`https://cdn.jsdelivr.net/gh/halonemuinai-sys/signature-mra@main/`).
 
----
+Dengan menggunakan tautan CDN ini:
+* **Bebas Masalah Lampiran**: Email Anda tidak akan memuat lampiran file gambar (0 attachments) di penerima seperti Yahoo Mail, Gmail, dan Apple Mail.
+* **Pemasangan Sangat Mudah**: Anda **hanya perlu menyalin file `.htm` saja** tanpa perlu menyalin folder gambar atau file ikon apa pun ke folder sistem komputer Anda.
 
-## Persiapan Aset Berkas
-
-Sebelum memasang ke Outlook, pastikan berkas-berkas berikut berada di dalam satu folder yang sama di komputer Anda:
-
-### Untuk Contoh 1: MRA Group
-1. `signature.htm` (berkas HTML utama)
-2. `mra_logo.png` (logo utama MRA Group)
-3. Folder `cropped_logos/` (berisi 16 berkas logo brand unit bisnis)
-4. Ikon Kontak: `icon_pin.png`, `icon_phone.png`, `icon_globe.png`, `icon_padlock.png`
-
-### Untuk Contoh 2: MRA Media
-1. `signature_media.htm` (berkas HTML utama)
-2. Folder `media_logos/` (berisi logo utama `mra_media_logo.png` dan 9 berkas logo media brand)
-3. Ikon Kontak: `icon_pin.png`, `icon_phone.png`, `icon_globe.png`, `icon_padlock.png`
-
-### Untuk Contoh 3: MRA Group (Personal Info)
-1. `signature_v3.htm` (berkas HTML utama dengan data nama dan kontak personal)
-2. `mra_logo.png` (logo utama MRA Group)
-3. Folder `cropped_logos/` (berisi 16 berkas logo brand unit bisnis)
-4. Ikon Kontak Kantor: `icon_pin.png`, `icon_phone.png`, `icon_globe.png`
-5. Ikon Kontak Personal: `icon_personal_mail.png`, `icon_personal_phone.png`, `icon_personal_mobile.png`
-6. Ikon Disclaimer: `icon_padlock.png` (gembok outline modern)
+Kami menyediakan 3 contoh berkas tanda tangan yang dapat Anda gunakan:
+* **Contoh 1 (MRA Group Korporat)**: `signature.htm` (lebar 832px, memuat 16 logo unit bisnis).
+* **Contoh 2 (MRA Media Divisi)**: `signature_media.htm` (lebar 766px, memuat 9 logo media brand).
+* **Contoh 3 (MRA Group Personal)**: `signature_v3.htm` (lebar 1053px, memuat kartu nama personal Aris Setiyono dan 16 logo unit bisnis).
 
 ---
 
@@ -45,16 +26,17 @@ Outlook Desktop menyimpan tanda tangan email di dalam folder sistem tersembunyi 
 3. Folder khusus tanda tangan Outlook akan terbuka secara otomatis di File Explorer.
 
 ### Langkah 2: Salin Berkas Tanda Tangan
-1. **Pilih salah satu contoh** tanda tangan yang ingin Anda gunakan.
-2. Salin berkas tanda tangan terpilih beserta folder aset gambarnya ke dalam folder `Signatures` yang baru terbuka tersebut:
-   * **Jika memilih Contoh 1**: Salin `signature.htm`, folder `cropped_logos`, serta berkas `icon_pin.png`, `icon_phone.png`, `icon_globe.png`, dan `icon_padlock.png`.
-   * **Jika memilih Contoh 2**: Salin `signature_media.htm`, folder `media_logos`, serta berkas `icon_pin.png`, `icon_phone.png`, `icon_globe.png`, dan `icon_padlock.png`.
-   * **Jika memilih Contoh 3**: Salin `signature_v3.htm`, folder `cropped_logos`, serta berkas `icon_pin.png`, `icon_phone.png`, `icon_globe.png`, `icon_personal_mail.png`, `icon_personal_phone.png`, `icon_personal_mobile.png`, dan `icon_padlock.png`.
+1. **Pilih berkas tanda tangan** yang ingin Anda gunakan:
+   * `signature.htm` (Contoh 1)
+   * `signature_media.htm` (Contoh 2)
+   * `signature_v3.htm` (Contoh 3)
+2. Salin file `.htm` pilihan Anda tersebut dan **tempelkan (paste) langsung** ke dalam folder `Signatures` yang baru terbuka tadi.
+   *(Catatan: Anda tidak perlu menyalin folder gambar atau ikon lainnya karena semua gambar sudah terhubung secara online).*
 
 ### Langkah 3: Aktifkan di Microsoft Outlook
 1. Buka aplikasi **Microsoft Outlook Desktop** Anda.
 2. Buka menu **File** > **Options** > **Mail** > klik tombol **Signatures...**.
-3. Anda akan melihat nama tanda tangan baru (**signature**, **signature_media**, atau **signature_v3**, sesuai nama file `.htm` yang Anda salin) sudah terdaftar di sana.
+3. Anda akan melihat nama tanda tangan baru (**signature**, **signature_media**, atau **signature_v3**, sesuai nama file `.htm` yang Anda salin) sudah terdaftar di daftar tanda tangan.
 4. Pada bagian **Choose default signature**, pilih nama tanda tangan tersebut untuk **New messages** (email baru) dan **Replies/forwards** (balasan/terusan).
 5. Klik **OK** untuk menyimpan pengaturan. Coba buat email baru untuk melihat hasilnya!
 
@@ -62,31 +44,10 @@ Outlook Desktop menyimpan tanda tangan email di dalam folder sistem tersembunyi 
 
 ## 2. Pemasangan di Outlook Web App (OWA / Outlook Online)
 
-Karena versi Web tidak dapat membaca file gambar lokal di komputer Anda secara otomatis, gambar-gambar logo tersebut harus **diunggah terlebih dahulu ke server web publik** (misal: `https://mra.co.id/images/`).
+Karena berkas gambar sudah dihosting secara online di GitHub CDN, Anda dapat menggunakannya di Outlook Web dengan cara menyalin tampilannya:
 
-### Langkah 1: Ubah Tautan Gambar di Kode HTML
-1. Buka file `signature.htm` menggunakan editor teks (seperti Notepad atau VS Code).
-2. Cari tag gambar (`<img src="..."/>`) dan ganti dengan URL publik gambar Anda.
-   * *Contoh:* Ubah `src="mra_logo.png"` menjadi `src="https://mra.co.id/images/mra_logo.png"`.
-   * Lakukan hal yang sama untuk semua ikon kontak dan logo brand di dalam folder `cropped_logos/`.
-3. Simpan (Save) perubahan file tersebut.
-
-### Langkah 2: Salin dan Tempel ke Pengaturan Outlook Web
-1. Buka berkas `signature.htm` di browser web Anda (seperti Google Chrome atau Microsoft Edge).
-2. Tekan **Ctrl + A** untuk memilih seluruh tampilan tanda tangan, lalu tekan **Ctrl + C** untuk menyalin (copy).
-3. Masuk ke akun email Anda di [Outlook Web](https://outlook.live.com/ atau https://outlook.office.com/).
-4. Klik ikon **Settings (Gerigi)** di pojok kanan atas > **Mail** > **Compose and reply**.
-5. Pada kotak teks **Email signature**, klik di dalamnya lalu tekan **Ctrl + V** untuk menempel (paste) tanda tangan.
-6. Centang opsi untuk menyertakan tanda tangan secara otomatis pada email baru dan balasan.
-7. Klik **Save**.
-
----
-
-## Cara Mengubah Informasi Kontak & Tautan Brand
-
-Jika Anda ingin mengubah nama gedung, alamat, nomor telepon, atau mengarahkan logo brand ke tautan situs web yang berbeda:
-1. Klik kanan pada berkas `signature.htm` > pilih **Open with** > **Notepad**.
-2. **Mengubah Kontak**: Cari teks `Wisma MRA, Jl. TB Simatupang` atau `6221 2765 1868` lalu edit sesuai informasi terbaru Anda.
-3. **Mengubah Tautan Brand**: Cari baris logo yang diinginkan, lalu ubah alamat URL di dalam atribut `href="..."`.
-   * *Contoh:* `<a href="https://www.bulgari.com" ...>` dapat diubah menjadi alamat situs web lain yang relevan.
-4. Simpan file (`Ctrl + S`) dan pasang kembali ke folder Outlook Anda.
+1. Klik ganda file `.htm` pilihan Anda (misalnya `signature_v3.htm`) untuk membukanya di browser web (Chrome/Edge).
+2. Tekan **Ctrl + A** untuk memilih seluruh tampilan tanda tangan, lalu tekan **Ctrl + C** untuk menyalinnya.
+3. Buka **Outlook Web** di browser Anda, masuk ke **Settings (ikon gigi)** > **Mail** > **Compose and reply** > **Signatures**.
+4. Buat tanda tangan baru, klik pada kotak editor teks, lalu tekan **Ctrl + V** untuk menempelkan tanda tangan yang telah disalin.
+5. Klik **Save**. Tanda tangan siap digunakan dan bebas dari masalah lampiran!
