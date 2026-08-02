@@ -371,29 +371,6 @@ select:focus {
   color: #ffffff;
   border-color: var(--accent-blue);
 }
-  font-size: 0.72rem;
-  font-weight: 600;
-  color: var(--text-muted);
-  text-align: center;
-}
-
-.brand-item .checkbox-dot {
-  position: absolute;
-  top: 6px;
-  right: 6px;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  border: 1px solid #cbd5e1;
-  background: #f1f5f9;
-  transition: all 0.2s ease;
-}
-
-.brand-item.active .checkbox-dot {
-  background: var(--accent-blue);
-  border-color: var(--accent-blue);
-  box-shadow: 0 0 6px rgba(37, 99, 235, 0.4);
-}
 
 /* Quick Select Buttons */
 .brand-quick-actions {
@@ -508,6 +485,31 @@ select:focus {
 .preview-canvas-wrapper.dark-mode {
   background: #0f172a;
   border-color: #334155;
+}
+
+/* Interactive Canvas Drag & Drop Repositioning */
+#signature-preview td[data-brand-id] {
+  cursor: grab !important;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+#signature-preview td[data-brand-id]:hover {
+  outline: 2px dashed #2563eb !important;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+#signature-preview td[data-brand-id].canvas-dragging {
+  opacity: 0.3;
+  cursor: grabbing !important;
+}
+
+#signature-preview td[data-brand-id].canvas-drag-over {
+  outline: 2px solid #2563eb !important;
+  outline-offset: 4px;
+  background-color: rgba(37, 99, 235, 0.12) !important;
+  border-radius: 4px;
 }
 
 /* Action Buttons */

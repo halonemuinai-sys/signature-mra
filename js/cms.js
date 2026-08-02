@@ -232,6 +232,60 @@ function updatePreview() {
 
   if (statCount) statCount.innerText = `${state.activeBrands.length} / ${BRANDS_DATABASE.length}`;
   if (statWidth) statWidth.innerText = (state.template === "corporate_v2_wide" || state.template === "corporate_v4_premier") ? "840px" : "832px";
+
+  // Attach Direct Drag and Drop Repositioning to Preview Canvas Logos
+  const previewLogos = canvas.querySelectorAll("td[data-brand-id]");
+  previewLogos.forEach(td => {
+    const brandId = td.getAttribute("data-brand-id");
+    td.setAttribute("draggable", "true");
+    td.setAttribute("title", "Drag logo to reposition anywhere on signature");
+
+    td.addEventListener("dragstart", (e) => {
+      e.stopPropagation();
+      draggedBrandId = brandId;
+      td.classList.add("canvas-dragging");
+      e.dataTransfer.effectAllowed = "move";
+      e.dataTransfer.setData("text/plain", brandId);
+    });
+
+    td.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      e.dataTransfer.dropEffect = "move";
+      td.classList.add("canvas-drag-over");
+    });
+
+    td.addEventListener("dragleave", (e) => {
+      e.stopPropagation();
+      td.classList.remove("canvas-drag-over");
+    });
+
+    td.addEventListener("drop", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      td.classList.remove("canvas-drag-over");
+
+      if (!draggedBrandId || draggedBrandId === brandId) return;
+
+      const fromIdx = state.activeBrands.indexOf(draggedBrandId);
+      const toIdx = state.activeBrands.indexOf(brandId);
+
+      if (fromIdx !== -1 && toIdx !== -1) {
+        state.activeBrands.splice(fromIdx, 1);
+        state.activeBrands.splice(toIdx, 0, draggedBrandId);
+        renderBrandSelector();
+        updatePreview();
+        showToast("✨ Logo repositioned directly on signature canvas!");
+      }
+    });
+
+    td.addEventListener("dragend", (e) => {
+      e.stopPropagation();
+      td.classList.remove("canvas-dragging");
+      previewLogos.forEach(el => el.classList.remove("canvas-drag-over"));
+      draggedBrandId = null;
+    });
+  });
 }
 
 // Generate Signature HTML based on Template & State
@@ -258,7 +312,7 @@ function generateSignatureHTML() {
     const row2Brands = selectedBrands.slice(Math.ceil(selectedBrands.length / 2));
 
     const renderBrandRow = (brands) => brands.map(b => `
-      <td align="center" valign="middle" style="padding: 0 4px;">
+      <td align="center" valign="middle" style="padding: 0 4px;" data-brand-id="${b.id}">
         <a href="${b.url}" target="_blank" style="border: 0; text-decoration: none;">
           <img src="${CDN_BASE}${b.src}" width="${b.w}" height="${b.h}" alt="${b.name}" style="display: block; width: ${b.w}px; height: ${b.h}px; border: 0;" />
         </a>
@@ -367,7 +421,7 @@ function generateSignatureHTML() {
     const row2Brands = selectedBrands.slice(Math.ceil(selectedBrands.length / 2));
 
     const renderBrandRow = (brands) => brands.map(b => `
-      <td align="center" valign="middle" style="padding: 0 4px;">
+      <td align="center" valign="middle" style="padding: 0 4px;" data-brand-id="${b.id}">
         <a href="${b.url}" target="_blank" style="border: 0; text-decoration: none;">
           <img src="${CDN_BASE}${b.src}" width="${b.w}" height="${b.h}" alt="${b.name}" style="display: block; width: ${b.w}px; height: ${b.h}px; border: 0;" />
         </a>
@@ -480,7 +534,7 @@ function generateSignatureHTML() {
   const row2Brands = selectedBrands.slice(Math.ceil(selectedBrands.length / 2));
 
   const render3ColBrandRow = (brands) => brands.map(b => `
-    <td align="center" valign="middle" style="padding: 0 2px;">
+    <td align="center" valign="middle" style="padding: 0 2px;" data-brand-id="${b.id}">
       <a href="${b.url}" target="_blank" style="border: 0; text-decoration: none;">
         <img src="${CDN_BASE}${b.src}" width="${b.w}" height="${b.h}" alt="${b.name}" style="display: block; width: ${b.w}px; height: ${b.h}px; border: 0;" />
       </a>
