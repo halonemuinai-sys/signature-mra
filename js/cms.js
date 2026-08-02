@@ -330,8 +330,10 @@ function generateSignatureHTML() {
   const dividerColor = isGold ? "#c89b3a" : "#000000";
   const headerNoticeColor = isGold ? "#c89b3a" : "#333333";
 
-  // Filter Active Brands preserving database order
-  const selectedBrands = BRANDS_DATABASE.filter(b => activeBrands.includes(b.id));
+  // Map Active Brands preserving custom user order in state.activeBrands
+  const selectedBrands = activeBrands
+    .map(id => BRANDS_DATABASE.find(b => b.id === id))
+    .filter(Boolean);
   
   // Format Address lines
   const formattedAddress = address.replace(/\n/g, "<br />");
