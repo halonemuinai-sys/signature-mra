@@ -1,16 +1,17 @@
 /**
- * MRA Email Signature Generator & CMS Engine
+ * MRA Email Signature Generator & CMS Engine (Ultra-Modern Edition)
  */
 
 const CDN_BASE = "https://cdn.jsdelivr.net/gh/halonemuinai-sys/signature-mra@main/";
 
-// Brand Logo Database
+// Brand Logo Database with Categories
 const BRANDS_DATABASE = [
-  // Luxury & F&B
+  // Luxury & Timepieces
   { id: "bvlgari", name: "BVLGARI", category: "luxury", url: "https://www.bulgari.com", src: "cropped_logos/brand_01_bvlgari.png", w: 70, h: 12 },
   { id: "omega", name: "OMEGA", category: "luxury", url: "https://www.omegawatches.com", src: "cropped_logos/brand_02_omega.png", w: 42, h: 20 },
   { id: "chronologie", name: "Chronologie", category: "luxury", url: "https://www.mra.co.id", src: "cropped_logos/brand_04_chronologie.png", w: 101, h: 20 },
   { id: "atmos", name: "atmos", category: "luxury", url: "https://atmos.co.id", src: "cropped_logos/brand_07_atmos.png", w: 44, h: 10 },
+  // F&B
   { id: "haagendazs", name: "Häagen-Dazs", category: "fnb", url: "https://www.haagendazs.co.id", src: "cropped_logos/brand_06_haagendazs.png", w: 53, h: 25 },
   { id: "jamba", name: "Jamba", category: "fnb", url: "https://www.jamba.com", src: "cropped_logos/brand_05_jamba.png", w: 53, h: 19 },
   { id: "hardrock", name: "Hard Rock Cafe", category: "fnb", url: "https://www.hardrockcafe.com/location/jakarta/", src: "cropped_logos/brand_16_hardrock.png", w: 38, h: 30 },
@@ -37,7 +38,8 @@ let state = {
   mobile: "0851 5514 0987",
   address: "Wisma MRA, Jl. TB Simatupang\nNo. 19 Jakarta, 12430, Indonesia",
   website: "www.mra.co.id",
-  theme: "gold", // gold or monochrome
+  theme: "gold",
+  activeCategory: "all",
   activeBrands: BRANDS_DATABASE.map(b => b.id),
   previewBg: "light"
 };
@@ -50,12 +52,36 @@ document.addEventListener("DOMContentLoaded", () => {
   updatePreview();
 });
 
+// Category Filter Handler
+function setBrandCategory(category) {
+  state.activeCategory = category;
+  document.querySelectorAll(".filter-tab").forEach(tab => {
+    tab.classList.toggle("active", tab.dataset.category === category);
+  });
+  renderBrandSelector();
+}
+
+// Select/Deselect All Brands
+function selectAllBrands(status) {
+  if (status) {
+    state.activeBrands = BRANDS_DATABASE.map(b => b.id);
+  } else {
+    state.activeBrands = [];
+  }
+  renderBrandSelector();
+  updatePreview();
+}
+
 // Render Brand Toggle Items
 function renderBrandSelector() {
   const container = document.getElementById("brand-selector");
   if (!container) return;
 
-  container.innerHTML = BRANDS_DATABASE.map(b => {
+  const filtered = state.activeCategory === "all"
+    ? BRANDS_DATABASE
+    : BRANDS_DATABASE.filter(b => b.category === state.activeCategory);
+
+  container.innerHTML = filtered.map(b => {
     const isActive = state.activeBrands.includes(b.id);
     return `
       <div class="brand-item ${isActive ? 'active' : ''}" data-id="${b.id}" onclick="toggleBrand('${b.id}')">
@@ -92,13 +118,19 @@ function bindFormEvents() {
   });
 }
 
-// Update Preview Canvas
+// Update Preview Canvas & Stats Bar
 function updatePreview() {
   const canvas = document.getElementById("signature-preview");
+  const statCount = document.getElementById("stat-brand-count");
+  const statWidth = document.getElementById("stat-signature-width");
+
   if (!canvas) return;
 
   const html = generateSignatureHTML();
   canvas.innerHTML = html;
+
+  if (statCount) statCount.innerText = `${state.activeBrands.length} / ${BRANDS_DATABASE.length}`;
+  if (statWidth) statWidth.innerText = state.template === "corporate_v2_wide" ? "840px" : "832px";
 }
 
 // Generate Signature HTML based on Template & State
@@ -113,7 +145,7 @@ function generateSignatureHTML() {
   const dividerColor = isGold ? "#c89b3a" : "#000000";
   const headerNoticeColor = isGold ? "#c89b3a" : "#333333";
 
-  // Filter Active Brands
+  // Filter Active Brands preserving database order
   const selectedBrands = BRANDS_DATABASE.filter(b => activeBrands.includes(b.id));
   
   // Format Address lines
@@ -371,9 +403,9 @@ async function copyRichText() {
     document.execCommand("copy");
     selection.removeAllRanges();
 
-    showToast("✓ Rich-Text Signature Copied! Paste directly into Outlook.");
+    showToast("✨ Rich-Text Signature Copied! Ready to paste in Outlook.");
   } catch (err) {
-    showToast("⚠ Unable to copy automatically. Please select the preview & copy.");
+    showToast("⚠ Unable to copy automatically. Please select preview & copy manually.");
   }
 }
 
@@ -381,7 +413,7 @@ async function copyRichText() {
 function copyHTMLCode() {
   const html = generateSignatureHTML();
   navigator.clipboard.writeText(html).then(() => {
-    showToast("✓ HTML Source Code copied to clipboard!");
+    showToast("✨ HTML Source Code copied to clipboard!");
   }).catch(() => {
     showToast("⚠ Failed to copy HTML code.");
   });
@@ -402,12 +434,12 @@ function downloadHTM() {
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
 
-  showToast("↓ Downloaded mra_signature_" + state.template + ".htm");
+  showToast("⚡ Downloaded mra_signature_" + state.template + ".htm");
 }
 
 // Preset Management
 function savePreset() {
-  const presetName = prompt("Enter a name for this signature preset:", state.name || "Default Signature");
+  const presetName = prompt("Enter a title for this signature preset:", state.name || "Default Signature");
   if (!presetName) return;
 
   const presets = JSON.parse(localStorage.getItem("mra_signature_presets") || "[]");
@@ -416,7 +448,7 @@ function savePreset() {
 
   localStorage.setItem("mra_signature_presets", JSON.stringify(presets));
   loadPresets();
-  showToast("✓ Signature preset saved!");
+  showToast("✨ Signature preset saved!");
 }
 
 function loadPresets() {
@@ -436,8 +468,8 @@ function loadPresets() {
         <p>${p.data.template} • ${p.data.email || 'No email'}</p>
       </div>
       <div class="preset-actions">
-        <button class="btn-icon" onclick="applyPreset(${p.id})"><i class="fas fa-check"></i> Load</button>
-        <button class="btn-icon delete" onclick="deletePreset(${p.id})"><i class="fas fa-trash"></i></button>
+        <button class="btn-icon" onclick="applyPreset(${p.id})"><i class="fa-solid fa-check"></i> Load</button>
+        <button class="btn-icon delete" onclick="deletePreset(${p.id})"><i class="fa-solid fa-trash"></i></button>
       </div>
     </div>
   `).join("");
@@ -459,7 +491,7 @@ function applyPreset(id) {
 
   renderBrandSelector();
   updatePreview();
-  showToast(`✓ Loaded preset: ${preset.title}`);
+  showToast(`✨ Loaded preset: ${preset.title}`);
 }
 
 function deletePreset(id) {
