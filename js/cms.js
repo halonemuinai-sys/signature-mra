@@ -233,13 +233,43 @@ function updatePreview() {
   if (statCount) statCount.innerText = `${state.activeBrands.length} / ${BRANDS_DATABASE.length}`;
   if (statWidth) statWidth.innerText = (state.template === "corporate_v2_wide" || state.template === "corporate_v4_premier") ? "840px" : "832px";
 
-  // Attach Direct Drag and Drop Repositioning to Preview Canvas Logos
+  // Selected Logo for Click-to-Swap
+  let selectedCanvasBrandId = null;
+
+  // Attach Direct Drag and Drop & Click-to-Swap to Preview Canvas Logos
   const previewLogos = canvas.querySelectorAll("td[data-brand-id]");
   previewLogos.forEach(td => {
     const brandId = td.getAttribute("data-brand-id");
     td.setAttribute("draggable", "true");
-    td.setAttribute("title", "Drag logo to reposition anywhere on signature");
+    td.setAttribute("title", "Click to select & swap, or Drag to reposition logo");
 
+    // Click-to-Swap handler
+    td.addEventListener("click", (e) => {
+      e.stopPropagation();
+      if (!selectedCanvasBrandId) {
+        selectedCanvasBrandId = brandId;
+        td.classList.add("canvas-selected");
+        const bName = BRANDS_DATABASE.find(b => b.id === brandId)?.name || brandId;
+        showToast(`📍 Selected ${bName}. Click another logo to swap position!`);
+      } else if (selectedCanvasBrandId === brandId) {
+        selectedCanvasBrandId = null;
+        td.classList.remove("canvas-selected");
+      } else {
+        const fromIdx = state.activeBrands.indexOf(selectedCanvasBrandId);
+        const toIdx = state.activeBrands.indexOf(brandId);
+        if (fromIdx !== -1 && toIdx !== -1) {
+          const temp = state.activeBrands[fromIdx];
+          state.activeBrands[fromIdx] = state.activeBrands[toIdx];
+          state.activeBrands[toIdx] = temp;
+          selectedCanvasBrandId = null;
+          renderBrandSelector();
+          updatePreview();
+          showToast("✨ Logo positions swapped!");
+        }
+      }
+    });
+
+    // Drag-and-Drop handlers
     td.addEventListener("dragstart", (e) => {
       e.stopPropagation();
       draggedBrandId = brandId;

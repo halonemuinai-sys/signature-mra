@@ -492,12 +492,28 @@ select:focus {
   cursor: grab !important;
   transition: all 0.2s ease;
   position: relative;
+  user-select: none !important;
+}
+
+#signature-preview td[data-brand-id] a,
+#signature-preview td[data-brand-id] img {
+  pointer-events: none !important;
+  user-select: none !important;
 }
 
 #signature-preview td[data-brand-id]:hover {
   outline: 2px dashed #2563eb !important;
-  outline-offset: 2px;
+  outline-offset: 3px;
   border-radius: 4px;
+  background-color: rgba(37, 99, 235, 0.08) !important;
+}
+
+#signature-preview td[data-brand-id].canvas-selected {
+  outline: 2px solid #2563eb !important;
+  outline-offset: 3px;
+  background-color: rgba(37, 99, 235, 0.2) !important;
+  border-radius: 4px;
+  box-shadow: 0 0 10px rgba(37, 99, 235, 0.3);
 }
 
 #signature-preview td[data-brand-id].canvas-dragging {
@@ -508,7 +524,7 @@ select:focus {
 #signature-preview td[data-brand-id].canvas-drag-over {
   outline: 2px solid #2563eb !important;
   outline-offset: 4px;
-  background-color: rgba(37, 99, 235, 0.12) !important;
+  background-color: rgba(37, 99, 235, 0.2) !important;
   border-radius: 4px;
 }
 
