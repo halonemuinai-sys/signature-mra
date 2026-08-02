@@ -1,0 +1,17 @@
+{
+  "name": "signature-mra-cms",
+  "version": "1.0.0",
+  "description": "MRA Group Email Signature Generator & CMS Dashboard",
+  "main": "index.html",
+  "scripts": {
+    "dev": "npx serve . -p 3000",
+    "start": "npx serve . -p 3000"
+  },
+  "keywords": [
+    "email-signature",
+    "mra-group",
+    "cms"
+  ],
+  "author": "MRA Group",
+  "license": "ISC"
+}
