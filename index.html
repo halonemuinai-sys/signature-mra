@@ -3,15 +3,15 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MRA Group — Email Signature CMS & Generator</title>
+  <title>MRA Group — Email Signature Studio</title>
   
-  <!-- Google Fonts & FontAwesome -->
+  <!-- Fonts & Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
-  <!-- Custom CMS Stylesheet -->
+  <!-- Blue & White Theme Stylesheet -->
   <link rel="stylesheet" href="css/cms.css">
 </head>
 <body>
@@ -20,18 +20,15 @@
   <header class="navbar">
     <div class="nav-brand">
       <img src="https://cdn.jsdelivr.net/gh/halonemuinai-sys/signature-mra@main/mra_logo.png" alt="MRA Group Logo">
-      <div class="nav-title-group">
-        <h1>Signature CMS</h1>
-        <p>Corporate Email Signature Studio</p>
-      </div>
-      <span class="nav-badge">V2.5 Pro Edition</span>
+      <h1>Signature CMS</h1>
+      <span class="nav-badge"><i class="fa-solid fa-circle-check"></i> Blue & White Edition</span>
     </div>
     <div class="nav-actions">
       <button class="btn btn-secondary" onclick="savePreset()">
         <i class="fa-regular fa-bookmark"></i> Save Preset
       </button>
       <button class="btn btn-primary" onclick="copyRichText()">
-        <i class="fa-solid fa-wand-magic-sparkles"></i> Copy to Outlook
+        <i class="fa-solid fa-wand-magic-sparkles"></i> Copy for Outlook
       </button>
     </div>
   </header>
@@ -42,26 +39,26 @@
     <!-- Left Panel: Controls & Customization -->
     <aside class="panel">
       <div class="panel-header">
-        <h2 class="panel-title"><i class="fa-solid fa-sliders"></i> Customization Studio</h2>
+        <h2 class="panel-title"><i class="fa-solid fa-sliders"></i> Signature Studio Settings</h2>
       </div>
 
       <!-- Template Selector -->
       <div class="form-group">
         <label for="template"><i class="fa-solid fa-layer-group"></i> Signature Template</label>
         <select id="template">
-          <option value="corporate_v2_wide" selected>Corporate V2 Wide (Horizontal + Gold Accents)</option>
+          <option value="corporate_v2_wide" selected>Corporate V2 Wide (Horizontal + Gold Theme)</option>
           <option value="corporate_v2">Corporate V2 (3-Column • 13 Logos)</option>
           <option value="corporate_v1">Corporate V1 (3-Column • 17 Logos)</option>
-          <option value="corporate_v3">Corporate V3 (3-Column • Personal Employee Details)</option>
+          <option value="corporate_v3">Corporate V3 (3-Column • Personal Details)</option>
         </select>
       </div>
 
       <!-- Theme Selector -->
       <div class="form-group">
-        <label for="theme"><i class="fa-solid fa-palette"></i> Color Accent Theme</label>
+        <label for="theme"><i class="fa-solid fa-palette"></i> Signature Divider Accent</label>
         <select id="theme">
           <option value="gold" selected>Corporate Gold (#c89b3a)</option>
-          <option value="monochrome">Classic Monochrome (Dark Grey)</option>
+          <option value="monochrome">Classic Monochrome</option>
         </select>
       </div>
 
@@ -179,7 +176,7 @@
 
   <!-- Footer -->
   <footer>
-    <p>MRA Group Corporate Email Signature Studio • Developed for MRA Group & Subsidiaries</p>
+    <p>MRA Group Corporate Email Signature Studio • Blue & White Edition</p>
   </footer>
 
   <!-- Core JavaScript -->
