@@ -7,7 +7,7 @@ const CDN_BASE = "https://cdn.jsdelivr.net/gh/halonemuinai-sys/signature-mra@mai
 // Brand Logo Database with Categories
 const BRANDS_DATABASE = [
   // Luxury & Timepieces
-  { id: "bvlgari", name: "BVLGARI", category: "luxury", url: "https://www.bulgari.com", src: "cropped_logos/brand_01_bvlgari.png", w: 70, h: 7 },
+  { id: "bvlgari", name: "BVLGARI", category: "luxury", url: "https://www.bulgari.com", src: "cropped_logos/brand_01_bvlgari.png", w: 70, h: 12 },
   { id: "omega", name: "OMEGA", category: "luxury", url: "https://www.omegawatches.com", src: "cropped_logos/brand_02_omega.png", w: 42, h: 20 },
   { id: "chronologie", name: "Chronologie", category: "luxury", url: "https://www.mra.co.id", src: "cropped_logos/brand_04_chronologie.png", w: 101, h: 20 },
   { id: "atmos", name: "atmos", category: "luxury", url: "https://atmos.co.id", src: "cropped_logos/brand_07_atmos.png", w: 44, h: 10 },
