@@ -61,6 +61,8 @@ function setBrandCategory(category) {
   renderBrandSelector();
 }
 
+let draggedBrandId = null;
+
 // Select/Deselect All Brands
 function selectAllBrands(status) {
   if (status) {
@@ -72,25 +74,124 @@ function selectAllBrands(status) {
   updatePreview();
 }
 
-// Render Brand Toggle Items
+// Reset Brand Order to Database Default
+function resetBrandOrder() {
+  const activeSet = new Set(state.activeBrands);
+  state.activeBrands = BRANDS_DATABASE.filter(b => activeSet.has(b.id)).map(b => b.id);
+  renderBrandSelector();
+  updatePreview();
+  showToast("🔄 Brand order reset to default!");
+}
+
+// Render Brand Toggle & Reorder Items
 function renderBrandSelector() {
   const container = document.getElementById("brand-selector");
   if (!container) return;
 
-  const filtered = state.activeCategory === "all"
-    ? BRANDS_DATABASE
-    : BRANDS_DATABASE.filter(b => b.category === state.activeCategory);
+  // Order brands based on state.activeBrands sequence, then remaining inactive brands
+  const activeBrandObjects = state.activeBrands
+    .map(id => BRANDS_DATABASE.find(b => b.id === id))
+    .filter(Boolean);
 
-  container.innerHTML = filtered.map(b => {
+  const inactiveBrandObjects = BRANDS_DATABASE.filter(b => !state.activeBrands.includes(b.id));
+
+  const allOrderedBrands = [...activeBrandObjects, ...inactiveBrandObjects];
+
+  const filtered = state.activeCategory === "all"
+    ? allOrderedBrands
+    : allOrderedBrands.filter(b => b.category === state.activeCategory);
+
+  container.innerHTML = filtered.map((b, idx) => {
     const isActive = state.activeBrands.includes(b.id);
+    const activeIdx = state.activeBrands.indexOf(b.id);
     return `
-      <div class="brand-item ${isActive ? 'active' : ''}" data-id="${b.id}" onclick="toggleBrand('${b.id}')">
-        <span class="checkbox-dot"></span>
-        <img src="${CDN_BASE}${b.src}" alt="${b.name}">
-        <span>${b.name}</span>
+      <div class="brand-item ${isActive ? 'active' : ''}" 
+           data-id="${b.id}" 
+           draggable="true"
+           ondragstart="handleDragStart(event, '${b.id}')"
+           ondragover="handleDragOver(event)"
+           ondragleave="handleDragLeave(event)"
+           ondrop="handleDrop(event, '${b.id}')"
+           ondragend="handleDragEnd(event)">
+        <span class="checkbox-dot" onclick="event.stopPropagation(); toggleBrand('${b.id}')"></span>
+        <div onclick="toggleBrand('${b.id}')" style="display: flex; flex-direction: column; align-items: center; width: 100%;">
+          <img src="${CDN_BASE}${b.src}" alt="${b.name}">
+          <span>${b.name}</span>
+        </div>
+        ${isActive ? `
+        <div class="brand-reorder-bar">
+          <button class="reorder-btn" onclick="event.stopPropagation(); moveBrand('${b.id}', -1)" title="Move Left / Up"><i class="fa-solid fa-chevron-left"></i></button>
+          <span style="font-size: 0.65rem; color: var(--accent-blue); font-weight: 700;">#${activeIdx + 1}</span>
+          <button class="reorder-btn" onclick="event.stopPropagation(); moveBrand('${b.id}', 1)" title="Move Right / Down"><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+        ` : ''}
       </div>
     `;
   }).join("");
+}
+
+// Move Brand Position (Shift Left or Right)
+function moveBrand(id, delta) {
+  const idx = state.activeBrands.indexOf(id);
+  if (idx === -1) return;
+
+  const targetIdx = idx + delta;
+  if (targetIdx < 0 || targetIdx >= state.activeBrands.length) return;
+
+  // Swap positions
+  const temp = state.activeBrands[idx];
+  state.activeBrands[idx] = state.activeBrands[targetIdx];
+  state.activeBrands[targetIdx] = temp;
+
+  renderBrandSelector();
+  updatePreview();
+}
+
+// HTML5 Drag and Drop Handlers
+function handleDragStart(e, id) {
+  draggedBrandId = id;
+  e.currentTarget.classList.add("dragging");
+  e.dataTransfer.effectAllowed = "move";
+  e.dataTransfer.setData("text/plain", id);
+}
+
+function handleDragOver(e) {
+  e.preventDefault();
+  e.dataTransfer.dropEffect = "move";
+  e.currentTarget.classList.add("drag-over");
+}
+
+function handleDragLeave(e) {
+  e.currentTarget.classList.remove("drag-over");
+}
+
+function handleDrop(e, targetId) {
+  e.preventDefault();
+  e.currentTarget.classList.remove("drag-over");
+
+  if (!draggedBrandId || draggedBrandId === targetId) return;
+
+  const fromIdx = state.activeBrands.indexOf(draggedBrandId);
+  const toIdx = state.activeBrands.indexOf(targetId);
+
+  if (fromIdx !== -1 && toIdx !== -1) {
+    // Reorder active brands
+    state.activeBrands.splice(fromIdx, 1);
+    state.activeBrands.splice(toIdx, 0, draggedBrandId);
+  } else if (fromIdx === -1 && toIdx !== -1) {
+    // Insert new active brand at position
+    state.activeBrands.splice(toIdx, 0, draggedBrandId);
+  }
+
+  renderBrandSelector();
+  updatePreview();
+  showToast("✨ Logo repositioned successfully!");
+}
+
+function handleDragEnd(e) {
+  e.currentTarget.classList.remove("dragging");
+  document.querySelectorAll(".brand-item").forEach(el => el.classList.remove("drag-over"));
+  draggedBrandId = null;
 }
 
 // Toggle Brand State
