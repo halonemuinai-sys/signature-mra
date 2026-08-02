@@ -3,186 +3,212 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MRA Group — Email Signature CMS & Generator</title>
+  <title>GLC Apps — MRA Signature Studio</title>
   
-  <!-- Google Fonts & FontAwesome -->
+  <!-- Fonts & Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
-  <!-- Custom CMS Stylesheet -->
+  <!-- GLC Apps Stylesheet -->
   <link rel="stylesheet" href="css/cms.css">
 </head>
 <body>
 
-  <!-- Top Navigation Bar -->
-  <header class="navbar">
-    <div class="nav-brand">
-      <img src="https://cdn.jsdelivr.net/gh/halonemuinai-sys/signature-mra@main/mra_logo.png" alt="MRA Group Logo">
-      <div class="nav-title-group">
-        <h1>Signature CMS</h1>
-        <p>Corporate Email Signature Studio</p>
-      </div>
-      <span class="nav-badge">V2.5 Pro Edition</span>
-    </div>
-    <div class="nav-actions">
-      <button class="btn btn-secondary" onclick="savePreset()">
-        <i class="fa-regular fa-bookmark"></i> Save Preset
-      </button>
-      <button class="btn btn-primary" onclick="copyRichText()">
-        <i class="fa-solid fa-wand-magic-sparkles"></i> Copy to Outlook
-      </button>
-    </div>
-  </header>
-
-  <!-- Main Dashboard Container -->
-  <main class="container">
+  <div class="glc-app-layout">
     
-    <!-- Left Panel: Controls & Customization -->
-    <aside class="panel">
-      <div class="panel-header">
-        <h2 class="panel-title"><i class="fa-solid fa-sliders"></i> Customization Studio</h2>
-      </div>
-
-      <!-- Template Selector -->
-      <div class="form-group">
-        <label for="template"><i class="fa-solid fa-layer-group"></i> Signature Template</label>
-        <select id="template">
-          <option value="corporate_v2_wide" selected>Corporate V2 Wide (Horizontal + Gold Accents)</option>
-          <option value="corporate_v2">Corporate V2 (3-Column • 13 Logos)</option>
-          <option value="corporate_v1">Corporate V1 (3-Column • 17 Logos)</option>
-          <option value="corporate_v3">Corporate V3 (3-Column • Personal Employee Details)</option>
-        </select>
-      </div>
-
-      <!-- Theme Selector -->
-      <div class="form-group">
-        <label for="theme"><i class="fa-solid fa-palette"></i> Color Accent Theme</label>
-        <select id="theme">
-          <option value="gold" selected>Corporate Gold (#c89b3a)</option>
-          <option value="monochrome">Classic Monochrome (Dark Grey)</option>
-        </select>
-      </div>
-
-      <!-- Personal Info Section -->
-      <div class="section-title"><i class="fa-regular fa-user"></i> Personal Information</div>
-      
-      <div class="form-row">
-        <div class="form-group">
-          <label for="name">Full Name</label>
-          <input type="text" id="name" value="Aris Munandar" placeholder="e.g. Aris Munandar">
-        </div>
-        <div class="form-group">
-          <label for="title">Job Title</label>
-          <input type="text" id="title" value="IT Support Specialist" placeholder="e.g. Senior Manager">
+    <!-- Left Navigation Sidebar -->
+    <aside class="glc-sidebar">
+      <div class="glc-sidebar-brand">
+        <img src="https://cdn.jsdelivr.net/gh/halonemuinai-sys/signature-mra@main/mra_logo.png" alt="MRA Group Logo">
+        <div class="glc-brand-text">
+          <h2>GLC System</h2>
+          <p>General, Legal, Compliance</p>
         </div>
       </div>
 
-      <div class="form-row">
-        <div class="form-group">
-          <label for="email">Corporate Email</label>
-          <input type="email" id="email" value="aris@mraretail.co.id" placeholder="name@mraretail.co.id">
+      <!-- Navigation Menu -->
+      <nav class="glc-nav-menu">
+        <a class="glc-nav-item active" href="#">
+          <i class="fa-solid fa-signature"></i>
+          <span>Signature CMS</span>
+        </a>
+        <a class="glc-nav-item" href="#" onclick="showToast('Helpdesk & Asset Integration Active')">
+          <i class="fa-solid fa-box-archive"></i>
+          <span>System Inventory</span>
+        </a>
+        <a class="glc-nav-item" href="#" onclick="showToast('Legal & Compliance Contracts Active')">
+          <i class="fa-solid fa-file-contract"></i>
+          <span>Legal & Compliance</span>
+        </a>
+        <a class="glc-nav-item" href="#" onclick="showToast('MRA Project Management Active')">
+          <i class="fa-solid fa-chart-gantt"></i>
+          <span>Project Management</span>
+        </a>
+      </nav>
+
+      <!-- User Profile Card -->
+      <div class="glc-sidebar-footer">
+        <div class="glc-user-avatar">AM</div>
+        <div class="glc-user-info">
+          <h4>Aris Munandar</h4>
+          <p>Administrator • GA IT</p>
         </div>
-        <div class="form-group">
-          <label for="phone">Office Phone</label>
-          <input type="text" id="phone" value="6221 2765 1868" placeholder="6221 2765 1868">
-        </div>
-      </div>
-
-      <!-- Company Location Section -->
-      <div class="section-title"><i class="fa-solid fa-building"></i> Office Location</div>
-
-      <div class="form-group">
-        <label for="address">Office Address</label>
-        <textarea id="address" rows="2">Wisma MRA, Jl. TB Simatupang&#10;No. 19 Jakarta, 12430, Indonesia</textarea>
-      </div>
-
-      <div class="form-group">
-        <label for="website">Company Website</label>
-        <input type="text" id="website" value="www.mra.co.id">
-      </div>
-
-      <!-- Brand Logos Selector -->
-      <div class="section-title"><i class="fa-solid fa-tags"></i> Brand Grid Manager</div>
-      
-      <!-- Category Tabs & Quick Actions -->
-      <div class="brand-filter-tabs">
-        <button class="filter-tab active" data-category="all" onclick="setBrandCategory('all')">All Brands</button>
-        <button class="filter-tab" data-category="luxury" onclick="setBrandCategory('luxury')">Luxury</button>
-        <button class="filter-tab" data-category="fnb" onclick="setBrandCategory('fnb')">F&B</button>
-        <button class="filter-tab" data-category="media" onclick="setBrandCategory('media')">Media</button>
-      </div>
-
-      <div class="brand-quick-actions">
-        <span style="font-size: 0.75rem; color: var(--text-muted);">Toggle Active Logos:</span>
-        <div>
-          <button class="text-btn" onclick="selectAllBrands(true)">Select All</button>
-          <span style="color: var(--border-color);">•</span>
-          <button class="text-btn" onclick="selectAllBrands(false)">Clear</button>
-        </div>
-      </div>
-
-      <div id="brand-selector" class="brand-selector-grid">
-        <!-- Dynamically rendered by cms.js -->
-      </div>
-
-      <!-- Presets List -->
-      <div class="section-title"><i class="fa-solid fa-clock-rotate-left"></i> Saved Presets</div>
-      <div id="preset-list" class="preset-list">
-        <!-- Dynamically rendered by cms.js -->
       </div>
     </aside>
 
-    <!-- Right Panel: Real-time Live Preview & Actions -->
-    <section class="preview-container">
+    <!-- Main Content Area -->
+    <div class="glc-main-content">
       
-      <!-- Toolbar -->
-      <div class="preview-toolbar">
-        <div class="preview-stats">
-          <div class="stat-chip"><i class="fa-solid fa-table-cells"></i> Logos: <span id="stat-brand-count">17 / 17</span></div>
-          <div class="stat-chip"><i class="fa-solid fa-ruler-horizontal"></i> Width: <span id="stat-signature-width">840px</span></div>
+      <!-- Topbar Header -->
+      <header class="glc-topbar">
+        <div class="glc-breadcrumb">
+          <span>GLC Apps</span> / <span>General Affairs</span> / <span class="active">Email Signature Studio</span>
         </div>
 
-        <div class="preview-mode-toggles">
-          <button id="btn-preview-light" class="toggle-btn active" onclick="togglePreviewBg('light')">
-            <i class="fa-regular fa-sun"></i> Light Theme
-          </button>
-          <button id="btn-preview-dark" class="toggle-btn" onclick="togglePreviewBg('dark')">
-            <i class="fa-regular fa-moon"></i> Dark Theme
-          </button>
-        </div>
-
-        <div class="action-bar">
-          <button class="btn btn-outline" onclick="copyHTMLCode()">
-            <i class="fa-code"></i> Copy HTML
-          </button>
-          <button class="btn btn-secondary" onclick="downloadHTM()">
-            <i class="fa-solid fa-download"></i> Download .htm
+        <div class="glc-topbar-actions">
+          <button class="btn btn-secondary" onclick="savePreset()">
+            <i class="fa-regular fa-bookmark"></i> Save Preset
           </button>
           <button class="btn btn-primary" onclick="copyRichText()">
-            <i class="fa-solid fa-wand-magic-sparkles"></i> Copy to Outlook
+            <i class="fa-solid fa-copy"></i> Copy for Outlook
           </button>
         </div>
-      </div>
+      </header>
 
-      <!-- Real-time Live Preview Canvas -->
-      <div id="canvas-wrapper" class="preview-canvas-wrapper">
-        <div id="signature-preview">
-          <!-- Dynamically updated by cms.js -->
-        </div>
-      </div>
+      <!-- Main Workspace -->
+      <main class="glc-workspace">
+        
+        <!-- Left Studio Form Card -->
+        <section class="glc-card">
+          <div class="glc-card-header">
+            <h3 class="glc-card-title"><i class="fa-solid fa-sliders"></i> Signature Studio</h3>
+          </div>
 
-    </section>
+          <!-- Template Selector -->
+          <div class="form-group">
+            <label for="template"><i class="fa-solid fa-layer-group"></i> Signature Template</label>
+            <select id="template">
+              <option value="corporate_v2_wide" selected>Corporate V2 Wide (Horizontal + Gold Theme)</option>
+              <option value="corporate_v2">Corporate V2 (3-Column • 13 Logos)</option>
+              <option value="corporate_v1">Corporate V1 (3-Column • 17 Logos)</option>
+              <option value="corporate_v3">Corporate V3 (3-Column • Personal Details)</option>
+            </select>
+          </div>
 
-  </main>
+          <!-- Theme Selector -->
+          <div class="form-group">
+            <label for="theme"><i class="fa-solid fa-palette"></i> Color Accent Theme</label>
+            <select id="theme">
+              <option value="gold" selected>Corporate Gold (#c89b3a)</option>
+              <option value="monochrome">Classic Monochrome</option>
+            </select>
+          </div>
 
-  <!-- Footer -->
-  <footer>
-    <p>MRA Group Corporate Email Signature Studio • Developed for MRA Group & Subsidiaries</p>
-  </footer>
+          <!-- Personal Info -->
+          <div class="glc-section-title"><i class="fa-regular fa-user"></i> Personal Information</div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="name">Full Name</label>
+              <input type="text" id="name" value="Aris Munandar" placeholder="e.g. Aris Munandar">
+            </div>
+            <div class="form-group">
+              <label for="title">Job Title</label>
+              <input type="text" id="title" value="IT Support Specialist" placeholder="e.g. Senior Manager">
+            </div>
+          </div>
 
-  <!-- Core JavaScript -->
+          <div class="form-row">
+            <div class="form-group">
+              <label for="email">Corporate Email</label>
+              <input type="email" id="email" value="aris@mraretail.co.id">
+            </div>
+            <div class="form-group">
+              <label for="phone">Office Phone</label>
+              <input type="text" id="phone" value="6221 2765 1868">
+            </div>
+          </div>
+
+          <!-- Office Location -->
+          <div class="glc-section-title"><i class="fa-solid fa-building"></i> Office Location</div>
+
+          <div class="form-group">
+            <label for="address">Address</label>
+            <textarea id="address" rows="2">Wisma MRA, Jl. TB Simatupang&#10;No. 19 Jakarta, 12430, Indonesia</textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="website">Company Website</label>
+            <input type="text" id="website" value="www.mra.co.id">
+          </div>
+
+          <!-- Brand Logos Grid -->
+          <div class="glc-section-title"><i class="fa-solid fa-tags"></i> Active Brand Grid</div>
+          
+          <div class="brand-filter-tabs">
+            <button class="filter-tab active" data-category="all" onclick="setBrandCategory('all')">All</button>
+            <button class="filter-tab" data-category="luxury" onclick="setBrandCategory('luxury')">Luxury</button>
+            <button class="filter-tab" data-category="fnb" onclick="setBrandCategory('fnb')">F&B</button>
+            <button class="filter-tab" data-category="media" onclick="setBrandCategory('media')">Media</button>
+          </div>
+
+          <div id="brand-selector" class="brand-selector-grid">
+            <!-- Rendered by cms.js -->
+          </div>
+
+          <!-- Presets List -->
+          <div class="glc-section-title"><i class="fa-solid fa-clock-rotate-left"></i> Saved Presets</div>
+          <div id="preset-list">
+            <!-- Rendered by cms.js -->
+          </div>
+        </section>
+
+        <!-- Right Preview Canvas -->
+        <section class="preview-container">
+          
+          <!-- Toolbar -->
+          <div class="preview-toolbar">
+            <div class="preview-stats">
+              <div class="stat-chip"><i class="fa-solid fa-table-cells"></i> Logos: <span id="stat-brand-count">17 / 17</span></div>
+              <div class="stat-chip"><i class="fa-solid fa-ruler-horizontal"></i> Width: <span id="stat-signature-width">840px</span></div>
+            </div>
+
+            <div class="preview-mode-toggles">
+              <button id="btn-preview-light" class="filter-tab active" onclick="togglePreviewBg('light')">
+                <i class="fa-regular fa-sun"></i> Light Client
+              </button>
+              <button id="btn-preview-dark" class="filter-tab" onclick="togglePreviewBg('dark')">
+                <i class="fa-regular fa-moon"></i> Dark Client
+              </button>
+            </div>
+
+            <div style="display: flex; gap: 8px;">
+              <button class="btn btn-secondary" onclick="copyHTMLCode()">
+                <i class="fa-code"></i> Copy HTML
+              </button>
+              <button class="btn btn-gold" onclick="downloadHTM()">
+                <i class="fa-solid fa-download"></i> Download .htm
+              </button>
+            </div>
+          </div>
+
+          <!-- Preview Canvas -->
+          <div id="canvas-wrapper" class="preview-canvas-wrapper">
+            <div id="signature-preview">
+              <!-- Rendered by cms.js -->
+            </div>
+          </div>
+
+        </section>
+
+      </main>
+
+    </div>
+
+  </div>
+
   <script src="js/cms.js"></script>
 </body>
 </html>
