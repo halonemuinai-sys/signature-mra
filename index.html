@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MRA Group — Email Signature CMS & Generator</title>
+  
+  <!-- Google Fonts & FontAwesome -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Custom CMS Stylesheet -->
+  <link rel="stylesheet" href="css/cms.css">
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <header class="navbar">
+    <div class="nav-brand">
+      <img src="https://cdn.jsdelivr.net/gh/halonemuinai-sys/signature-mra@main/mra_logo.png" alt="MRA Group Logo">
+      <h1>Signature CMS</h1>
+      <span class="nav-badge">Corporate V2.5</span>
+    </div>
+    <div class="nav-actions">
+      <button class="btn btn-secondary" onclick="savePreset()">
+        <i class="fa-regular fa-bookmark"></i> Save Preset
+      </button>
+      <button class="btn btn-primary" onclick="copyRichText()">
+        <i class="fa-regular fa-copy"></i> Copy Rich Signature
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Dashboard Container -->
+  <main class="container">
+    
+    <!-- Left Panel: Controls & Customization -->
+    <aside class="panel">
+      <div class="panel-header">
+        <h2 class="panel-title"><i class="fa-solid fa-sliders"></i> Signature Settings</h2>
+      </div>
+
+      <!-- Template Selector -->
+      <div class="form-group">
+        <label for="template"><i class="fa-solid fa-layer-group"></i> Choose Template</label>
+        <select id="template">
+          <option value="corporate_v2_wide" selected>Corporate V2 Wide (Horizontal + Gold Theme)</option>
+          <option value="corporate_v2">Corporate V2 (3 Column - 13 Brands)</option>
+          <option value="corporate_v1">Corporate V1 (3 Column - 17 Brands)</option>
+          <option value="corporate_v3">Corporate V3 (With Personal Contact)</option>
+        </select>
+      </div>
+
+      <!-- Theme Selector -->
+      <div class="form-group">
+        <label for="theme"><i class="fa-solid fa-palette"></i> Color Accent Theme</label>
+        <select id="theme">
+          <option value="gold" selected>Gold Corporate (#c89b3a)</option>
+          <option value="monochrome">Classic Monochrome (Black & Grey)</option>
+        </select>
+      </div>
+
+      <!-- Personal Info Section -->
+      <div class="section-title"><i class="fa-regular fa-user"></i> Personal Information</div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label for="name">Full Name</label>
+          <input type="text" id="name" value="Aris Munandar" placeholder="e.g. Aris Munandar">
+        </div>
+        <div class="form-group">
+          <label for="title">Job Title</label>
+          <input type="text" id="title" value="IT Support Specialist" placeholder="e.g. Senior Manager">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="email">Corporate Email</label>
+          <input type="email" id="email" value="aris@mraretail.co.id" placeholder="name@mraretail.co.id">
+        </div>
+        <div class="form-group">
+          <label for="phone">Office Phone</label>
+          <input type="text" id="phone" value="6221 2765 1868" placeholder="6221 2765 1868">
+        </div>
+      </div>
+
+      <!-- Company Location Section -->
+      <div class="section-title"><i class="fa-solid fa-building"></i> Company Location</div>
+
+      <div class="form-group">
+        <label for="address">Office Address</label>
+        <input type="text" id="address" value="Wisma MRA, Jl. TB Simatupang&#10;No. 19 Jakarta, 12430, Indonesia">
+      </div>
+
+      <div class="form-group">
+        <label for="website">Company Website</label>
+        <input type="text" id="website" value="www.mra.co.id">
+      </div>
+
+      <!-- Brand Logos Selector -->
+      <div class="section-title"><i class="fa-solid fa-tags"></i> Active Brand Logos</div>
+      <div id="brand-selector" class="brand-selector-grid">
+        <!-- Dynamically rendered by cms.js -->
+      </div>
+
+      <!-- Presets List -->
+      <div class="section-title"><i class="fa-solid fa-clock-rotate-left"></i> Saved Presets</div>
+      <div id="preset-list" class="preset-list">
+        <!-- Dynamically rendered by cms.js -->
+      </div>
+    </aside>
+
+    <!-- Right Panel: Real-time Live Preview & Actions -->
+    <section class="preview-container">
+      
+      <!-- Toolbar -->
+      <div class="preview-toolbar">
+        <div class="preview-mode-toggles">
+          <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: 500;">Preview Mode:</span>
+          <button id="btn-preview-light" class="toggle-btn active" onclick="togglePreviewBg('light')">
+            <i class="fa-regular fa-sun"></i> Light Client
+          </button>
+          <button id="btn-preview-dark" class="toggle-btn" onclick="togglePreviewBg('dark')">
+            <i class="fa-regular fa-moon"></i> Dark Client
+          </button>
+        </div>
+
+        <div class="action-bar">
+          <button class="btn btn-outline" onclick="copyHTMLCode()">
+            <i class="fa-code"></i> Copy HTML
+          </button>
+          <button class="btn btn-secondary" onclick="downloadHTM()">
+            <i class="fa-solid fa-download"></i> Download .htm
+          </button>
+          <button class="btn btn-primary" onclick="copyRichText()">
+            <i class="fa-regular fa-copy"></i> Copy to Outlook
+          </button>
+        </div>
+      </div>
+
+      <!-- Real-time Live Preview Canvas -->
+      <div id="canvas-wrapper" class="preview-canvas-wrapper">
+        <div id="signature-preview">
+          <!-- Dynamically updated by cms.js -->
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p>MRA Group Corporate Email Signature System • Powered by Google Antigravity AI Engine</p>
+  </footer>
+
+  <!-- Core JavaScript -->
+  <script src="js/cms.js"></script>
+</body>
+</html>
