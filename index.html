@@ -45,6 +45,8 @@
       <div class="form-group">
         <label for="template"><i class="fa-solid fa-layer-group"></i> Signature Template</label>
         <select id="template">
+          <option value="corporate_v6">Corporate V6 — Bold Color Block ✨</option>
+          <option value="corporate_v5">Corporate V5 — Minimal 2026</option>
           <option value="corporate_v4_premier" selected>Corporate V4 Premier — Modern Card Layout</option>
           <option value="corporate_v2_wide">Corporate Wide — Horizontal Gold</option>
           <option value="corporate_v2">Corporate V2 — 13 Brand</option>
@@ -55,10 +57,14 @@
 
       <!-- Theme Selector -->
       <div class="form-group">
-        <label for="theme"><i class="fa-solid fa-palette"></i> Signature Divider Accent</label>
+        <label for="theme"><i class="fa-solid fa-palette"></i> Signature Color Variant</label>
         <select id="theme">
           <option value="gold" selected>Corporate Gold</option>
           <option value="monochrome">Classic Monochrome</option>
+          <option value="navy">Navy Blue</option>
+          <option value="emerald">Emerald Green</option>
+          <option value="burgundy">Burgundy Red</option>
+          <option value="royal">Royal Purple</option>
         </select>
       </div>
 
@@ -103,6 +109,14 @@
       <!-- Brand Logos Selector -->
       <div class="section-title"><i class="fa-solid fa-tags"></i> Brand Grid Manager</div>
       
+      <!-- Quick Group Select: instantly set active brands to one division -->
+      <div class="brand-group-select">
+        <span class="quick-label">Quick Select Group:</span>
+        <button class="group-btn group-luxury" onclick="selectBrandGroup('luxury')"><i class="fa-solid fa-gem"></i> Luxury</button>
+        <button class="group-btn group-fnb" onclick="selectBrandGroup('fnb')"><i class="fa-solid fa-utensils"></i> F&amp;B</button>
+        <button class="group-btn group-media" onclick="selectBrandGroup('media')"><i class="fa-solid fa-newspaper"></i> Media</button>
+      </div>
+
       <!-- Category Tabs & Quick Actions -->
       <div class="brand-filter-tabs">
         <button class="filter-tab active" data-category="all" onclick="setBrandCategory('all')">All Brands</button>

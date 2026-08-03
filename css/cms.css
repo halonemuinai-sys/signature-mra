@@ -233,6 +233,74 @@ select:focus {
   background: var(--border-color);
 }
 
+/* Quick Group Select Buttons */
+.brand-group-select {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.quick-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-right: 2px;
+}
+
+.group-btn {
+  border: 1px solid var(--border-color);
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 5px 12px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.2s ease;
+}
+
+.group-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.group-btn.group-luxury {
+  color: #92702a;
+  border-color: #e8d9a8;
+  background: #fdf8ec;
+}
+.group-btn.group-luxury:hover {
+  background: var(--accent-gold);
+  border-color: var(--accent-gold);
+  color: #ffffff;
+}
+
+.group-btn.group-fnb {
+  color: #b45309;
+  border-color: #fcd9a8;
+  background: #fffaf0;
+}
+.group-btn.group-fnb:hover {
+  background: #f59e0b;
+  border-color: #f59e0b;
+  color: #ffffff;
+}
+
+.group-btn.group-media {
+  color: #6d28d9;
+  border-color: #ddd6fe;
+  background: #f7f5ff;
+}
+.group-btn.group-media:hover {
+  background: #7c3aed;
+  border-color: #7c3aed;
+  color: #ffffff;
+}
+
 /* Brand Filter Category Tabs */
 .brand-filter-tabs {
   display: flex;

@@ -4,6 +4,16 @@
 
 const CDN_BASE = "https://cdn.jsdelivr.net/gh/halonemuinai-sys/signature-mra@main/";
 
+// Signature Color Variants (accent used for dividers, CTA buttons, badges & links)
+const COLOR_VARIANTS = {
+  gold: { label: "Corporate Gold", accent: "#c89b3a" },
+  monochrome: { label: "Classic Monochrome", accent: "#000000" },
+  navy: { label: "Navy Blue", accent: "#1e3a8a" },
+  emerald: { label: "Emerald Green", accent: "#065f46" },
+  burgundy: { label: "Burgundy Red", accent: "#9f1239" },
+  royal: { label: "Royal Purple", accent: "#6d28d9" }
+};
+
 // Brand Logo Database with Categories
 const BRANDS_DATABASE = [
   // Luxury & Timepieces
@@ -72,6 +82,19 @@ function selectAllBrands(status) {
   }
   renderBrandSelector();
   updatePreview();
+}
+
+// Quick Group Select: replace active brands with only the chosen division
+function selectBrandGroup(category) {
+  state.activeBrands = BRANDS_DATABASE.filter(b => b.category === category).map(b => b.id);
+  state.activeCategory = category;
+  document.querySelectorAll(".filter-tab").forEach(tab => {
+    tab.classList.toggle("active", tab.dataset.category === category);
+  });
+  renderBrandSelector();
+  updatePreview();
+  const labels = { luxury: "Luxury", fnb: "F&B", media: "Media" };
+  showToast(`✨ Brand grid set to ${labels[category]} group!`);
 }
 
 // Reset Brand Order to Database Default
@@ -231,7 +254,7 @@ function updatePreview() {
   canvas.innerHTML = html;
 
   if (statCount) statCount.innerText = `${state.activeBrands.length} / ${BRANDS_DATABASE.length}`;
-  if (statWidth) statWidth.innerText = (state.template === "corporate_v2_wide" || state.template === "corporate_v4_premier") ? "840px" : "832px";
+  if (statWidth) statWidth.innerText = (state.template === "corporate_v2_wide" || state.template === "corporate_v4_premier" || state.template === "corporate_v5" || state.template === "corporate_v6") ? "840px" : "832px";
 
   // Selected Logo for Click-to-Swap
   let selectedCanvasBrandId = null;
@@ -327,8 +350,8 @@ function generateSignatureHTML() {
   const iconPhone = isGold ? "icon_phone_gold.png" : "icon_phone.png";
   const iconGlobe = isGold ? "icon_globe_gold.png" : "icon_globe.png";
   const iconLock = isGold ? "icon_padlock_gold.png" : "icon_padlock.png";
-  const dividerColor = isGold ? "#c89b3a" : "#000000";
-  const headerNoticeColor = isGold ? "#c89b3a" : "#333333";
+  const dividerColor = (COLOR_VARIANTS[theme] && COLOR_VARIANTS[theme].accent) || COLOR_VARIANTS.gold.accent;
+  const headerNoticeColor = theme === "monochrome" ? "#333333" : dividerColor;
 
   // Map Active Brands preserving custom user order in state.activeBrands
   const selectedBrands = activeBrands
@@ -412,8 +435,8 @@ function generateSignatureHTML() {
             <div style="font-family: 'Segoe UI', Arial, sans-serif; font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: ${dividerColor}; margin-bottom: 12px;">MRA Group Brands & Subsidiaries</div>
             <table cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse; width: 100%;">
               <tr>
-                <td style="padding: 0;">
-                  <table cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse; width: 100%;">
+                <td align="center" style="padding: 0;">
+                  <table align="center" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;">
                     <tr>${renderBrandRow(row1Brands)}</tr>
                   </table>
                 </td>
@@ -422,8 +445,8 @@ function generateSignatureHTML() {
                 <td height="12" style="font-size: 0; line-height: 0; padding: 0;">&nbsp;</td>
               </tr>
               <tr>
-                <td style="padding: 0;">
-                  <table cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse; width: 100%;">
+                <td align="center" style="padding: 0;">
+                  <table align="center" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;">
                     <tr>${renderBrandRow(row2Brands)}</tr>
                   </table>
                 </td>
@@ -448,9 +471,9 @@ function generateSignatureHTML() {
   }
 
   if (template === "corporate_v2_wide") {
-    // Wide Layout (2 Column)
-    const row1Brands = selectedBrands.slice(0, Math.ceil(selectedBrands.length / 2));
-    const row2Brands = selectedBrands.slice(Math.ceil(selectedBrands.length / 2));
+    // Wide Layout (2 Column) — Top row: Luxury + F&B, Bottom row: Media
+    const row1Brands = selectedBrands.filter(b => b.category === "luxury" || b.category === "fnb");
+    const row2Brands = selectedBrands.filter(b => b.category === "media");
 
     const renderBrandRow = (brands) => brands.map(b => `
       <td align="center" valign="middle" style="padding: 0 4px;" data-brand-id="${b.id}">
@@ -523,23 +546,26 @@ function generateSignatureHTML() {
           <!-- Column 2: Brand Logos Grid -->
           <td valign="middle" style="width: 580px; padding-left: 20px;">
             <table cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse; width: 580px;">
+              ${row1Brands.length ? `
               <tr>
-                <td style="padding: 0;">
-                  <table cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse; width: 580px;">
+                <td align="center" style="padding: 0;">
+                  <table align="center" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;">
                     <tr>${renderBrandRow(row1Brands)}</tr>
                   </table>
                 </td>
-              </tr>
+              </tr>` : ''}
+              ${(row1Brands.length && row2Brands.length) ? `
               <tr>
                 <td height="15" style="font-size: 0; line-height: 0; padding: 0;">&nbsp;</td>
-              </tr>
+              </tr>` : ''}
+              ${row2Brands.length ? `
               <tr>
-                <td style="padding: 0;">
-                  <table cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse; width: 580px;">
+                <td align="center" style="padding: 0;">
+                  <table align="center" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;">
                     <tr>${renderBrandRow(row2Brands)}</tr>
                   </table>
                 </td>
-              </tr>
+              </tr>` : ''}
             </table>
           </td>
         </tr>
@@ -555,6 +581,246 @@ function generateSignatureHTML() {
             <span style="font-weight: bold; color: ${headerNoticeColor};">CONFIDENTIALITY NOTICE*</span> — This e-mail and any attachments are confidential and intended solely for the addressee(s). If you are not the intended recipient, please notify the sender immediately, delete this e-mail and all copies, and do not use, disclose, copy or distribute its contents.
             <br /><br />
             This e-mail does not constitute a legally binding agreement or commitment on behalf of MRA Group, its subsidiaries or affiliates unless expressly confirmed in writing by a duly authorized representative. Electronic communications are susceptible to alteration or unauthorized access, and MRA Group accepts no liability for any message that has been altered, corrupted or falsified.
+          </td>
+        </tr>
+      </table>
+    `;
+  }
+
+  if (template === "corporate_v5") {
+    // Minimal Modern 2026 Layout — neutral off-white card (dark-mode-safer than pure white),
+    // compact bulletproof CTA button, brand grid grouped tight & centered.
+    const row1Brands = selectedBrands.slice(0, Math.ceil(selectedBrands.length / 2));
+    const row2Brands = selectedBrands.slice(Math.ceil(selectedBrands.length / 2));
+
+    const renderBrandRow = (brands) => brands.map(b => `
+      <td align="center" valign="middle" style="padding: 0 6px;" data-brand-id="${b.id}">
+        <a href="${b.url}" target="_blank" style="border: 0; text-decoration: none;">
+          <img src="${CDN_BASE}${b.src}" width="${b.w}" height="${b.h}" alt="${b.name}" style="display: block; width: ${b.w}px; height: ${b.h}px; border: 0;" />
+        </a>
+      </td>
+    `).join("");
+
+    return `
+      <table cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse; font-family: 'Segoe UI', Arial, sans-serif; width: 840px; background-color: #fbfbfc; border: 1px solid #e5e7eb; border-radius: 16px;">
+        <tr>
+          <td style="padding: 28px 32px;">
+            <table cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse; width: 100%;">
+              <tr>
+                <td valign="top" style="width: 300px; padding-right: 24px;">
+                  <img src="${CDN_BASE}mra_logo.png" width="110" height="47" alt="MRA Group" style="display: block; width: 110px; height: 47px; border: 0; margin-bottom: 16px;" />
+                  <table cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;">
+                    <tr>
+                      <td style="border-left: 3px solid ${dividerColor}; padding-left: 12px;">
+                        <div style="font-family: 'Segoe UI', Arial, sans-serif; font-size: 17px; font-weight: 800; color: #0f172a; line-height: 20px; letter-spacing: -0.01em;">${name}</div>
+                        <div style="font-family: 'Segoe UI', Arial, sans-serif; font-size: 11px; font-weight: 700; color: ${dividerColor}; line-height: 15px; margin-top: 3px; text-transform: uppercase; letter-spacing: 0.02em;">${title}</div>
+                        <div style="font-family: 'Segoe UI', Arial, sans-serif; font-size: 10px; color: #64748b; line-height: 14px; margin-top: 2px;">MRA Group</div>
+                      </td>
+                    </tr>
+                  </table>
+                  <table cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse; margin-top: 16px;">
+                    <tr>
+                      <td align="center" style="background-color: ${dividerColor}; border-radius: 5px;">
+                        <a href="https://${website}" target="_blank" style="display: inline-block; padding: 8px 18px; font-family: 'Segoe UI', Arial, sans-serif; font-size: 10px; font-weight: 700; color: #ffffff; text-decoration: none; letter-spacing: 0.05em;">VISIT WEBSITE</a>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+                <td valign="middle" style="width: 1px; background-color: #e5e7eb; padding: 0; font-size: 0; line-height: 0;">&nbsp;</td>
+                <td valign="top" style="padding-left: 28px;">
+                  <table cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse; width: 100%;">
+                    <tr>
+                      <td valign="top" style="width: 20px; padding-bottom: 10px;">
+                        <img src="${CDN_BASE}${iconPin}" width="16" height="16" alt="Loc" style="display: block; width: 16px; height: 16px; border: 0;" />
+                      </td>
+                      <td valign="top" style="font-family: 'Segoe UI', Arial, sans-serif; font-size: 11px; line-height: 15px; color: #374151; padding-bottom: 10px;">
+                        ${formattedAddress}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td valign="middle" style="width: 20px; padding-bottom: 8px;">
+                        <img src="${CDN_BASE}${iconPhone}" width="16" height="16" alt="Tel" style="display: block; width: 16px; height: 16px; border: 0;" />
+                      </td>
+                      <td valign="middle" style="font-family: 'Segoe UI', Arial, sans-serif; font-size: 11px; line-height: 15px; color: #0f172a; padding-bottom: 8px;">
+                        <strong>Office:</strong> ${phone} ${mobile ? `&nbsp;|&nbsp; <strong>Mobile:</strong> ${mobile}` : ''}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td valign="middle" style="width: 20px;">
+                        <img src="${CDN_BASE}${iconGlobe}" width="16" height="16" alt="Web" style="display: block; width: 16px; height: 16px; border: 0;" />
+                      </td>
+                      <td valign="middle" style="font-family: 'Segoe UI', Arial, sans-serif; font-size: 11px; line-height: 15px; color: #0f172a;">
+                        <a href="mailto:${email}" style="color: #2563eb; text-decoration: none; font-weight: 600;">${email}</a> &nbsp;|&nbsp; <a href="https://${website}" target="_blank" style="color: ${dividerColor}; text-decoration: none; font-weight: bold;">${website}</a>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+
+            <table cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse; width: 100%; margin-top: 22px; margin-bottom: 20px;">
+              <tr>
+                <td style="border-top: 1px solid #e5e7eb; font-size: 0; line-height: 0;">&nbsp;</td>
+              </tr>
+            </table>
+
+            <div style="font-family: 'Segoe UI', Arial, sans-serif; font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: ${dividerColor}; margin-bottom: 14px; text-align: center;">MRA Group Brands &amp; Subsidiaries</div>
+            <table cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse; width: 100%;">
+              ${row1Brands.length ? `
+              <tr>
+                <td align="center" style="padding: 0;">
+                  <table align="center" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;">
+                    <tr>${renderBrandRow(row1Brands)}</tr>
+                  </table>
+                </td>
+              </tr>` : ''}
+              ${(row1Brands.length && row2Brands.length) ? `
+              <tr>
+                <td height="14" style="font-size: 0; line-height: 0; padding: 0;">&nbsp;</td>
+              </tr>` : ''}
+              ${row2Brands.length ? `
+              <tr>
+                <td align="center" style="padding: 0;">
+                  <table align="center" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;">
+                    <tr>${renderBrandRow(row2Brands)}</tr>
+                  </table>
+                </td>
+              </tr>` : ''}
+            </table>
+
+            <table cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse; width: 100%; margin-top: 22px; border-top: 1px solid #e5e7eb;">
+              <tr>
+                <td valign="top" style="width: 34px; padding-top: 14px; padding-right: 12px;">
+                  <img src="${CDN_BASE}${iconLock}" width="28" height="28" alt="Lock" style="display: block; width: 28px; height: 28px; border: 0;" />
+                </td>
+                <td valign="top" style="padding-top: 14px; font-family: 'Segoe UI', Arial, sans-serif; font-size: 9px; line-height: 12px; color: #6b7280; text-align: left;">
+                  <span style="font-weight: bold; color: ${headerNoticeColor};">CONFIDENTIALITY NOTICE*</span> — This e-mail and any attachments are confidential and intended solely for the addressee(s). If you are not the intended recipient, please notify the sender immediately, delete this e-mail and all copies, and do not use, disclose, copy or distribute its contents.
+                  <br /><br />
+                  This e-mail does not constitute a legally binding agreement or commitment on behalf of MRA Group, its subsidiaries or affiliates unless expressly confirmed in writing by a duly authorized representative.
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    `;
+  }
+
+  if (template === "corporate_v6") {
+    // Bold Color Block Layout — top color stripe + colored title badge, showcases signature color variants
+    const row1Brands = selectedBrands.slice(0, Math.ceil(selectedBrands.length / 2));
+    const row2Brands = selectedBrands.slice(Math.ceil(selectedBrands.length / 2));
+
+    const renderBrandRow = (brands) => brands.map(b => `
+      <td align="center" valign="middle" style="padding: 0 6px;" data-brand-id="${b.id}">
+        <a href="${b.url}" target="_blank" style="border: 0; text-decoration: none;">
+          <img src="${CDN_BASE}${b.src}" width="${b.w}" height="${b.h}" alt="${b.name}" style="display: block; width: ${b.w}px; height: ${b.h}px; border: 0;" />
+        </a>
+      </td>
+    `).join("");
+
+    return `
+      <table cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse; font-family: 'Segoe UI', Arial, sans-serif; width: 840px; background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 14px;">
+        <tr>
+          <td style="background-color: ${dividerColor}; height: 8px; font-size: 0; line-height: 0; border-radius: 14px 14px 0 0;">&nbsp;</td>
+        </tr>
+        <tr>
+          <td style="padding: 26px 32px;">
+            <table cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse; width: 100%;">
+              <tr>
+                <td valign="top" style="width: 300px; padding-right: 24px;">
+                  <img src="${CDN_BASE}mra_logo.png" width="105" height="45" alt="MRA Group" style="display: block; width: 105px; height: 45px; border: 0; margin-bottom: 14px;" />
+                  <div style="font-family: 'Segoe UI', Arial, sans-serif; font-size: 17px; font-weight: 800; color: #0f172a; line-height: 20px; letter-spacing: -0.01em; margin-bottom: 8px;">${name}</div>
+                  <table cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;">
+                    <tr>
+                      <td style="background-color: ${dividerColor}; border-radius: 20px; padding: 4px 12px;">
+                        <span style="font-family: 'Segoe UI', Arial, sans-serif; font-size: 10px; font-weight: 700; color: #ffffff; text-transform: uppercase; letter-spacing: 0.04em;">${title}</span>
+                      </td>
+                    </tr>
+                  </table>
+                  <div style="font-family: 'Segoe UI', Arial, sans-serif; font-size: 10px; color: #64748b; line-height: 14px; margin-top: 8px;">MRA Group</div>
+                  <table cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse; margin-top: 14px;">
+                    <tr>
+                      <td align="center" style="background-color: ${dividerColor}; border-radius: 5px;">
+                        <a href="https://${website}" target="_blank" style="display: inline-block; padding: 8px 18px; font-family: 'Segoe UI', Arial, sans-serif; font-size: 10px; font-weight: 700; color: #ffffff; text-decoration: none; letter-spacing: 0.05em;">VISIT WEBSITE</a>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+                <td valign="middle" style="width: 1px; background-color: #e5e7eb; padding: 0; font-size: 0; line-height: 0;">&nbsp;</td>
+                <td valign="top" style="padding-left: 28px;">
+                  <table cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse; width: 100%;">
+                    <tr>
+                      <td valign="top" style="width: 20px; padding-bottom: 10px;">
+                        <img src="${CDN_BASE}${iconPin}" width="16" height="16" alt="Loc" style="display: block; width: 16px; height: 16px; border: 0;" />
+                      </td>
+                      <td valign="top" style="font-family: 'Segoe UI', Arial, sans-serif; font-size: 11px; line-height: 15px; color: #374151; padding-bottom: 10px;">
+                        ${formattedAddress}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td valign="middle" style="width: 20px; padding-bottom: 8px;">
+                        <img src="${CDN_BASE}${iconPhone}" width="16" height="16" alt="Tel" style="display: block; width: 16px; height: 16px; border: 0;" />
+                      </td>
+                      <td valign="middle" style="font-family: 'Segoe UI', Arial, sans-serif; font-size: 11px; line-height: 15px; color: #0f172a; padding-bottom: 8px;">
+                        <strong style="color: ${dividerColor};">Office:</strong> ${phone} ${mobile ? `&nbsp;|&nbsp; <strong style="color: ${dividerColor};">Mobile:</strong> ${mobile}` : ''}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td valign="middle" style="width: 20px;">
+                        <img src="${CDN_BASE}${iconGlobe}" width="16" height="16" alt="Web" style="display: block; width: 16px; height: 16px; border: 0;" />
+                      </td>
+                      <td valign="middle" style="font-family: 'Segoe UI', Arial, sans-serif; font-size: 11px; line-height: 15px; color: #0f172a;">
+                        <a href="mailto:${email}" style="color: #2563eb; text-decoration: none; font-weight: 600;">${email}</a> &nbsp;|&nbsp; <a href="https://${website}" target="_blank" style="color: ${dividerColor}; text-decoration: none; font-weight: bold;">${website}</a>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+
+            <table cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse; width: 100%; margin-top: 22px; margin-bottom: 20px;">
+              <tr>
+                <td style="border-top: 2px solid ${dividerColor}; font-size: 0; line-height: 0;">&nbsp;</td>
+              </tr>
+            </table>
+
+            <div style="font-family: 'Segoe UI', Arial, sans-serif; font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: ${dividerColor}; margin-bottom: 14px; text-align: center;">MRA Group Brands &amp; Subsidiaries</div>
+            <table cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse; width: 100%;">
+              ${row1Brands.length ? `
+              <tr>
+                <td align="center" style="padding: 0;">
+                  <table align="center" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;">
+                    <tr>${renderBrandRow(row1Brands)}</tr>
+                  </table>
+                </td>
+              </tr>` : ''}
+              ${(row1Brands.length && row2Brands.length) ? `
+              <tr>
+                <td height="14" style="font-size: 0; line-height: 0; padding: 0;">&nbsp;</td>
+              </tr>` : ''}
+              ${row2Brands.length ? `
+              <tr>
+                <td align="center" style="padding: 0;">
+                  <table align="center" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;">
+                    <tr>${renderBrandRow(row2Brands)}</tr>
+                  </table>
+                </td>
+              </tr>` : ''}
+            </table>
+
+            <table cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse; width: 100%; margin-top: 22px; border-top: 1px solid #e5e7eb;">
+              <tr>
+                <td valign="top" style="width: 34px; padding-top: 14px; padding-right: 12px;">
+                  <img src="${CDN_BASE}${iconLock}" width="28" height="28" alt="Lock" style="display: block; width: 28px; height: 28px; border: 0;" />
+                </td>
+                <td valign="top" style="padding-top: 14px; font-family: 'Segoe UI', Arial, sans-serif; font-size: 9px; line-height: 12px; color: #6b7280; text-align: left;">
+                  <span style="font-weight: bold; color: ${headerNoticeColor};">CONFIDENTIALITY NOTICE*</span> — This e-mail and any attachments are confidential and intended solely for the addressee(s). If you are not the intended recipient, please notify the sender immediately, delete this e-mail and all copies, and do not use, disclose, copy or distribute its contents.
+                  <br /><br />
+                  This e-mail does not constitute a legally binding agreement or commitment on behalf of MRA Group, its subsidiaries or affiliates unless expressly confirmed in writing by a duly authorized representative.
+                </td>
+              </tr>
+            </table>
           </td>
         </tr>
       </table>
@@ -588,8 +854,8 @@ function generateSignatureHTML() {
         <td valign="middle" style="width: 450px; padding-left: 15px; padding-right: 15px;">
           <table cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse; width: 450px;">
             <tr>
-              <td style="padding: 0;">
-                <table cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse; width: 450px;">
+              <td align="center" style="padding: 0;">
+                <table align="center" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;">
                   <tr>${render3ColBrandRow(row1Brands)}</tr>
                 </table>
               </td>
@@ -598,8 +864,8 @@ function generateSignatureHTML() {
               <td height="12" style="font-size: 0; line-height: 0; padding: 0;">&nbsp;</td>
             </tr>
             <tr>
-              <td style="padding: 0;">
-                <table cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse; width: 450px;">
+              <td align="center" style="padding: 0;">
+                <table align="center" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;">
                   <tr>${render3ColBrandRow(row2Brands)}</tr>
                 </table>
               </td>
